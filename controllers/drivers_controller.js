@@ -6,6 +6,15 @@ module.exports = {
     res.send({ hi: 'there' });
   },
 
+  index(req, res, next) {
+    const { lgn, lat } = req.query;
+    
+    Driver.geoNear(
+      { type: 'Point', coordinates: [lgn, lat] },
+      { spherical: true, maxDistance: 200000 }
+    )
+  },
+
   create(req, res, next) {
     const driverProps = req.body;
 
