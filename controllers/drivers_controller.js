@@ -6,12 +6,29 @@ module.exports = {
     res.send({ hi: 'there' });
   },
 
-  create(req, res) {
+  create(req, res, next) {
     const driverProps = req.body;
 
     Driver.create(driverProps)
-      .then(driver => {
-        res.send(driver);
-      });
+      .then(driver => res.send(driver))
+      .catch(next);
+  },
+
+  edit(req, res, next) {
+    const id = req.params.id;
+    const driverProps = req.body;
+
+    Driver.findByIdAndUpdate(id, req.body)
+      .then(() => Driver.findById({ _id: id }))
+      .then(driver => res.send(driver))
+      .catch(next);
+  },
+
+  delete(req, res, next) {
+    const id = req.params.id;
+  
+    Driver.findByIdAndRemove(id)
+      .then(driver => res.send(driver))
+      .catch(next);
   }
 };
